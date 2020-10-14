@@ -10,18 +10,18 @@ pd.set_option('display.width', None)
 df = pd.read_csv("weather.csv")
 
 # Read the first 5 rows of data
-# print(df.head(5))
+print(df.head(5))
 
 # Read the last 5 rows of data
-# print(df.tail(5))
+print(df.tail(5))
 
 # Read 3 rows of data. From row 5 to row upto but not including 8. (Similar to slicing)
-# print(df[5:8])
+print(df[5:8])
 
 
 # print the contents of a single column. 2 ways
-# print(df.Location)
-# print(df['Location'])
+print(df.Location)
+print(df['Location'])
 
 '''
 Note, you can display the values for the following information
@@ -32,27 +32,27 @@ size - Number of elements
 '''
 
 # as an example
-# print(df.dtypes)
-# print(df.size)
+print(df.dtypes)
+print(df.size)
 
 
 # The below will display the rows that have any missing values (Displayed as NaN - Not a Number)
-# print(df[df.isnull().any(axis=1)])
+print(df[df.isnull().any(axis=1)])
 
 # The below will display rows that have missing values in all columns (note, there aren't any)
-# print(df[df.isnull().all(axis=1)])
+print(df[df.isnull().all(axis=1)])
 
 # Provides basic statistics on a single variable
-#print(df['MaxTemp'].describe())
+print(df['MaxTemp'].describe())
 
 # Provides basic statistics on multiple variables (note the double braces).
-#print(df[['MaxTemp', 'MinTemp']].describe())
+print(df[['MaxTemp', 'MinTemp']].describe())
 
 # Provides a decimal value for the correlation between two variables
-# print(df['MaxTemp'].corr(df['MinTemp']))
+print(df['MaxTemp'].corr(df['MinTemp']))
 
 # Provides a list
-# print(df['WindGustDir'].unique())
+print(df['WindGustDir'].unique())
 
 '''
 Some more useful opperators:
@@ -80,5 +80,3 @@ plt.savefig('test.jpg')
 
 # required to show the created plots
 plt.show()
-
-
