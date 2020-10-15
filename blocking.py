@@ -94,132 +94,154 @@ def simpleBlocking(rec_dict, blk_attr_list):
 # -----------------------------------------------------------------------------
 
 def phoneticBlocking(rec_dict, blk_attr_list):
-  """Build the blocking index data structure (dictionary) to store blocking
-     key values (BKV) as keys and the corresponding list of record identifiers.
+    """Build the blocking index data structure (dictionary) to store blocking
+       key values (BKV) as keys and the corresponding list of record identifiers.
 
-     A blocking is implemented that concatenates Soundex encoded values of
-     attribute values.
+       A blocking is implemented that concatenates Soundex encoded values of
+       attribute values.
 
-     Parameter Description:
-       rec_dict      : Dictionary that holds the record identifiers as keys
-                       and corresponding list of record values
-       blk_attr_list : List of blocking key attributes to use
+       Parameter Description:
+         rec_dict      : Dictionary that holds the record identifiers as keys
+                         and corresponding list of record values
+         blk_attr_list : List of blocking key attributes to use
 
-     This method returns a dictionary with blocking key values as its keys and
-     list of record identifiers as its values (one list for each block).
-  """
+       This method returns a dictionary with blocking key values as its keys and
+       list of record identifiers as its values (one list for each block).
+    """
 
-  block_dict = {}  # The dictionary with blocks to be generated and returned
+    block_dict = {}  # The dictionary with blocks to be generated and returned
 
-  print('Run phonetic blocking:')
-  print('  List of blocking key attributes: '+str(blk_attr_list))
-  print('  Number of records to be blocked: '+str(len(rec_dict)))
-  print('')
+    print('Run phonetic blocking:')
+    print('  List of blocking key attributes: '+str(blk_attr_list))
+    print('  Number of records to be blocked: '+str(len(rec_dict)))
+    print('')
 
-  for (rec_id, rec_values) in rec_dict.items():
+    for (rec_id, rec_values) in rec_dict.items():
 
-    rec_bkv = ''  # Initialise the blocking key value for this record
+        rec_bkv = ''  # Initialise the blocking key value for this record
+        attr_count = 0
+        # Process selected blocking attributes
+        #
+        for attr in blk_attr_list:
+            attr_count += 1
+            attr_val = rec_values[attr]
 
-    # Process selected blocking attributes
-    #
-    for attr in blk_attr_list:
-      attr_val = rec_values[attr]
+            # *********** Implement Soundex function here *********
+            if not attr_val:
+                rec_bkv += 'Z999'
+            else:
+                for i in range(len(attr_val)):
+                    if i == 0:
+                        rec_bkv += attr_val[0].upper()
+                    elif len(rec_bkv) >= (4*attr_count):
+                        continue
+                    elif len(rec_bkv) < (4*attr_count):
+                        if attr_val[i] in ['b', 'f', 'p', 'v']:
+                            rec_bkv += '1'
+                        elif attr_val[i] in ['d', 't']:
+                            rec_bkv += '3'
+                        elif attr_val[i] in ['m', 'n']:
+                            rec_bkv += '5'
+                        elif attr_val[i] in ['c', 'g', 'j', 'k', 'q', 's', 'x', 'z']:
+                            rec_bkv += '2'
+                        elif attr_val[i] in ['l']:
+                            rec_bkv += '4'
+                        elif attr_val[i] in ['r']:
+                            rec_bkv += '6'
+                if len(rec_bkv) < (4*attr_count):
+                    rec_bkv += '0' * ((4*attr_count) - len(rec_bkv))
+        print(attr_val, rec_bkv)
+        # Also think about how to handle empty attribute values
 
-      # *********** Implement Soundex function here *********
+        # ************ End of your Soundex code *********************************
 
-      # Add your code here 
+        # Insert the blocking key value and record into blocking dictionary
+        #
+        if (rec_bkv in block_dict): # Block key value in block index
 
-      # Also think about how to handle empty attribute values
+          # Only need to add the record
+          #
+          rec_id_list = block_dict[rec_bkv]
+          rec_id_list.append(rec_id)
 
-      # ************ End of your Soundex code *********************************
+        else: # Block key value not in block index
 
-    # Insert the blocking key value and record into blocking dictionary
-    #
-    if (rec_bkv in block_dict): # Block key value in block index
+          # Create a new block and add the record identifier
+          #
+          rec_id_list = [rec_id]
 
-      # Only need to add the record
-      #
-      rec_id_list = block_dict[rec_bkv]
-      rec_id_list.append(rec_id)
+        block_dict[rec_bkv] = rec_id_list  # Store the new block
 
-    else: # Block key value not in block index
-
-      # Create a new block and add the record identifier
-      #
-      rec_id_list = [rec_id]
-
-    block_dict[rec_bkv] = rec_id_list  # Store the new block
-
-  return block_dict
+    return block_dict
 
 # -----------------------------------------------------------------------------
 
 def slkBlocking(rec_dict, fam_name_attr_ind, giv_name_attr_ind, 
                 dob_attr_ind, gender_attr_ind):
-  """Build the blocking index data structure (dictionary) to store blocking
-     key values (BKV) as keys and the corresponding list of record identifiers.
+    """Build the blocking index data structure (dictionary) to store blocking
+       key values (BKV) as keys and the corresponding list of record identifiers.
 
-     This function should implement the statistical linkage key (SLK-581)
-     blocking approach as used in real-world linkage applications:
+       This function should implement the statistical linkage key (SLK-581)
+       blocking approach as used in real-world linkage applications:
 
-     http://www.aihw.gov.au/WorkArea/DownloadAsset.aspx?id=60129551915
+       http://www.aihw.gov.au/WorkArea/DownloadAsset.aspx?id=60129551915
 
-     A SLK-581 blocking key is the based on the concatenation of:
-     - 3 letters of family name
-     - 2 letters of given name
-     - Date of birth
-     - Sex
+       A SLK-581 blocking key is the based on the concatenation of:
+       - 3 letters of family name
+       - 2 letters of given name
+       - Date of birth
+       - Sex
 
-     Parameter Description:
-       rec_dict          : Dictionary that holds the record identifiers as
-                           keys and corresponding list of record values
-       fam_name_attr_ind : The number (index) of the attribute that contains
-                           family name (last name) 
-       giv_name_attr_ind : The number (index) of the attribute that contains
-                           given name (first name)
-       dob_attr_ind      : The number (index) of the attribute that contains
-                           date of birth
-       gender_attr_ind   : The number (index) of the attribute that contains
-                           gender (sex)
+       Parameter Description:
+         rec_dict          : Dictionary that holds the record identifiers as
+                             keys and corresponding list of record values
+         fam_name_attr_ind : The number (index) of the attribute that contains
+                             family name (last name)
+         giv_name_attr_ind : The number (index) of the attribute that contains
+                             given name (first name)
+         dob_attr_ind      : The number (index) of the attribute that contains
+                             date of birth
+         gender_attr_ind   : The number (index) of the attribute that contains
+                             gender (sex)
 
-     This method returns a dictionary with blocking key values as its keys and
-     list of record identifiers as its values (one list for each block).
-  """
+       This method returns a dictionary with blocking key values as its keys and
+       list of record identifiers as its values (one list for each block).
+    """
 
-  block_dict = {}  # The dictionary with blocks to be generated and returned
+    block_dict = {}  # The dictionary with blocks to be generated and returned
 
-  print('Run SLK-581 blocking:')
-  print('  Number of records to be blocked: '+str(len(rec_dict)))
-  print('')
+    print('Run SLK-581 blocking:')
+    print('  Number of records to be blocked: '+str(len(rec_dict)))
+    print('')
 
-  for (rec_id, rec_values) in rec_dict.items():
+    for (rec_id, rec_values) in rec_dict.items():
 
-    rec_bkv = ''  # Initialise the blocking key value for this record
- 
-    # *********** Implement SLK-581 function here ***********
+        rec_bkv = ''  # Initialise the blocking key value for this record
 
-    # Add your code here 
+        # *********** Implement SLK-581 function here ***********
 
-    # ************ End of your SLK-581 code ***********************************
+        # Add your code here
 
-    # Insert the blocking key value and record into blocking dictionary
-    #
-    if (rec_bkv in block_dict): # Block key value in block index
+        # ************ End of your SLK-581 code ***********************************
 
-      # Only need to add the record
-      #
-      rec_id_list = block_dict[rec_bkv]
-      rec_id_list.append(rec_id)
+        # Insert the blocking key value and record into blocking dictionary
+        #
+        if (rec_bkv in block_dict): # Block key value in block index
 
-    else: # Block key value not in block index
+            # Only need to add the record
+            #
+            rec_id_list = block_dict[rec_bkv]
+            rec_id_list.append(rec_id)
 
-      # Create a new block and add the record identifier
-      #
-      rec_id_list = [rec_id]
+        else: # Block key value not in block index
 
-    block_dict[rec_bkv] = rec_id_list  # Store the new block
+            # Create a new block and add the record identifier
+            #
+            rec_id_list = [rec_id]
 
-  return block_dict
+        block_dict[rec_bkv] = rec_id_list  # Store the new block
+
+    return block_dict
 
 # -----------------------------------------------------------------------------
 

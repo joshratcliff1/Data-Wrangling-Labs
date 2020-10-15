@@ -78,8 +78,8 @@ attrB_list    = [1,2,3,4,6,7,8,9,10,11]
 # The list of attributes to use for blocking (all must occur in the above
 # attribute lists)
 #
-blocking_attrA_list = [3,4]
-blocking_attrB_list = [3,4]
+blocking_attrA_list = [1]
+blocking_attrB_list = [1]
 
 # ******** In lab 4, explore different comparison functions for different  ****
 # ********           attributes                                            ****
@@ -128,18 +128,18 @@ start_time = time.time()
 
 # No blocking (all records in one block)
 #
-blockA_dict = blocking.noBlocking(recA_dict)
-blockB_dict = blocking.noBlocking(recB_dict)
+# blockA_dict = blocking.noBlocking(recA_dict)
+# blockB_dict = blocking.noBlocking(recB_dict)
 
 # Simple attribute-based blocking
 #
-#blockA_dict = blocking.simpleBlocking(recA_dict, blocking_attrA_list)
-#blockB_dict = blocking.simpleBlocking(recB_dict, blocking_attrB_list)
+# blockA_dict = blocking.simpleBlocking(recA_dict, blocking_attrA_list)
+# blockB_dict = blocking.simpleBlocking(recB_dict, blocking_attrB_list)
 
 # Phonetic (Soundex) based blocking
 #
-#blockA_dict = blocking.phoneticBlocking(recA_dict, blocking_attrA_list)
-#blockB_dict = blocking.phoneticBlocking(recB_dict, blocking_attrB_list)
+blockA_dict = blocking.phoneticBlocking(recA_dict, blocking_attrA_list)
+blockB_dict = blocking.phoneticBlocking(recB_dict, blocking_attrB_list)
 
 # Statistical linkage key (SLK-581) based blocking
 #
