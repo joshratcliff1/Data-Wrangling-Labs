@@ -218,11 +218,74 @@ def slkBlocking(rec_dict, fam_name_attr_ind, giv_name_attr_ind,
 
         rec_bkv = ''  # Initialise the blocking key value for this record
 
-        # *********** Implement SLK-581 function here ***********
+        # TODO: Copied Sample Code
+        # Get family name value
+        #
+        fam_name = rec_values[fam_name_attr_ind]
 
-        # Add your code here
+        if (fam_name == ''):
+            rec_bkv += '999'
+        else:
+            fam_name = fam_name.replace('-', '')  # Remove non letter characters
+            fam_name = fam_name.replace(",", '')
+            fam_name = fam_name.replace('_', '')
 
-        # ************ End of your SLK-581 code ***********************************
+            if (len(fam_name) >= 5):
+                rec_bkv += (fam_name[1] + fam_name[2] + fam_name[4])
+            elif (len(fam_name) >= 3):
+                rec_bkv += (fam_name[1] + fam_name[2] + '2')
+            elif (len(fam_name) >= 2):
+                rec_bkv += (fam_name[1] + '22')
+
+        # Get given name value
+        #
+        giv_name = rec_values[giv_name_attr_ind]
+
+        if (giv_name == ''):
+            rec_bkv += '99'
+        else:
+            giv_name = giv_name.replace('-', '')  # Remove non letter characters
+            giv_name = giv_name.replace(",", '')
+            giv_name = giv_name.replace('_', '')
+
+            if (len(giv_name) >= 3):
+                rec_bkv += (giv_name[1] + giv_name[2])
+            elif (len(giv_name) >= 2):
+                rec_bkv += (giv_name[1] + '2')
+
+        # DoB structure we use: dd/mm/yyyy
+
+        # Get date of birth
+        #
+        dob = rec_values[dob_attr_ind]
+
+        dob_list = rec_values[dob_attr_ind].split('/')
+
+        # Add some checks
+        #
+        if (len(dob_list[0]) < 2):
+            dob_list[0] = '0' + dob_list[0]  # Add leading zero for days < 10
+        if (len(dob_list[1]) < 2):
+            dob_list[1] = '0' + dob_list[1]  # Add leading zero for months < 10
+
+        dob = ''.join(dob_list)  # Create: ddmmyyyy
+
+        assert len(dob) == 8, dob
+
+        rec_bkv += dob
+
+        # Get gender
+        #
+        gender = rec_values[gender_attr_ind].lower()
+
+        if (gender == 'm'):
+            rec_bkv += '1'
+        elif (gender == 'f'):
+            rec_bkv += '2'
+        else:
+            rec_bkv += '9'
+
+        # TODO: End of copied Sample Code
 
         # Insert the blocking key value and record into blocking dictionary
         #

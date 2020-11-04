@@ -30,11 +30,11 @@ import evaluation
 
 # ******** Uncomment to select a pair of datasets **************
 
-datasetA_name = 'datasets/clean-A-1000.csv'
-datasetB_name = 'datasets/clean-B-1000.csv'
+# datasetA_name = 'datasets/clean-A-1000.csv'
+# datasetB_name = 'datasets/clean-B-1000.csv'
 
-#datasetA_name = 'datasets/little-dirty-A-10000.csv'
-#datasetB_name = 'datasets/little-dirty-B-10000.csv'
+datasetA_name = 'datasets/little-dirty-A-10000.csv'
+datasetB_name = 'datasets/little-dirty-B-10000.csv'
 
 headerA_line   = True  # Dataset A header line available - True or Flase
 headerB_line   = True  # Dataset B header line available - True or Flase
@@ -43,9 +43,9 @@ headerB_line   = True  # Dataset B header line available - True or Flase
 
 # ***** Uncomment a file name corresponding to your selected datasets *******
 
-truthfile_name = 'datasets/clean-true-matches-1000.csv'
+# truthfile_name = 'datasets/clean-true-matches-1000.csv'
 
-#truthfile_name = 'datasets/little-dirty-true-matches-10000.csv'
+truthfile_name = 'datasets/little-dirty-true-matches-10000.csv'
 
 # The two attribute numbers that contain the record identifiers
 #
@@ -148,10 +148,10 @@ giv_name_attr_ind = 1
 dob_attr_ind      = 6
 gender_attr_ind   = 4
 
-#blockA_dict = blocking.slkBlocking(recA_dict, fam_name_attr_ind, \
+# blockA_dict = blocking.slkBlocking(recA_dict, fam_name_attr_ind, \
 #                                   giv_name_attr_ind, dob_attr_ind, \
 #                                   gender_attr_ind)
-#blockB_dict = blocking.slkBlocking(recB_dict, fam_name_attr_ind, \
+# blockB_dict = blocking.slkBlocking(recB_dict, fam_name_attr_ind, \
 #                                   giv_name_attr_ind, dob_attr_ind, \
 #                                   gender_attr_ind)
 
